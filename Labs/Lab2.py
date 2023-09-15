@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 
-def start_lab2():
+def start_point():
     # Task 1: Read the image from the camera and translate it into HSV format.
     cap = cv2.VideoCapture(0)
 
