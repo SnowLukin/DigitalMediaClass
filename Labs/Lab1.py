@@ -4,10 +4,10 @@ from Utils import InputUtils
 
 
 # TASK 1
-def print_cam():
+def task1():
     cap = cv2.VideoCapture(0)
-    cap.set(3, 640)
-    cap.set(4, 480)
+    cap.set(3, 1280)
+    cap.set(4, 720)
     while True:
         ret, frame = cap.read()
 
@@ -57,7 +57,7 @@ def task3():
 
 
 # TASK 4
-def copy_video():
+def task4():
     video = cv2.VideoCapture('/Resources/screen_vid.mp4', cv2.CAP_ANY)
     _, vid = video.read()
 
@@ -140,7 +140,7 @@ def task6():
 
 
 # TASK 7
-def read_ip_write_to_file():
+def task7():
     video = cv2.VideoCapture(0)
     _, vid = video.read()
 
@@ -203,27 +203,24 @@ def task8():
 
         central_pixel_color = frame[height // 2, width // 2]
 
-        color_distances = [
-            np.linalg.norm(central_pixel_color - np.array([0, 0, 255])),
-            np.linalg.norm(central_pixel_color - np.array([0, 255, 0])),
-            np.linalg.norm(central_pixel_color - np.array([255, 0, 0]))
-        ]
+        image_hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        height, width, _ = image_hsv.shape
+        central_pixel = image_hsv[height // 2, width // 2]
 
-        closest_color_index = np.argmin(color_distances)
+        hue = central_pixel[0]  # assuming central_pixel is in HSV color space
 
-        if closest_color_index == 0:
+        if (hue > 0) and (hue < 30) or (150 <= hue <=180):  # closest to red if hue is between 0-30 or 150-180
+            print('Red')
             cv2.rectangle(cross_image, rect_start_h, rect_end_h, (0, 0, 255), -1)
-        elif closest_color_index == 1:
-            cv2.rectangle(cross_image, rect_start_h, rect_end_h, (0, 255, 0), -1)
-        else:
-            cv2.rectangle(cross_image, rect_start_h, rect_end_h, (255, 0, 0), -1)
-
-        if closest_color_index == 0:
             cv2.rectangle(cross_image, rect_start_v, rect_end_v, (0, 0, 255), -1)
-        elif closest_color_index == 1:
+        elif (30 <= hue < 90):  # closest to green if hue is between 30-90
+            print('Green')
             cv2.rectangle(cross_image, rect_start_v, rect_end_v, (0, 255, 0), -1)
-        else:
+            cv2.rectangle(cross_image, rect_start_h, rect_end_h, (0, 255, 0), -1)
+        else:  # closest to blue if hue is between 90-150
+            print('Blue')
             cv2.rectangle(cross_image, rect_start_v, rect_end_v, (255, 0, 0), -1)
+            cv2.rectangle(cross_image, rect_start_h, rect_end_h, (255, 0, 0), -1)
 
         result_frame = cv2.addWeighted(frame, 1, cross_image, 0.5, 0)
 
@@ -236,22 +233,22 @@ def task8():
     cv2.destroyAllWindows()
 
 
-# TASK 9
-def task9():
-    cap = cv2.VideoCapture(0)
-
-    while True:
-        ok, frame = cap.read()
-        if not ok:
-            break
-
-        cv2.imshow("camera", frame)
-
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-
-    cap.release()
-    cv2.destroyAllWindows()
+# # TASK 9
+# def task9():
+#     cap = cv2.VideoCapture(0)
+#
+#     while True:
+#         ok, frame = cap.read()
+#         if not ok:
+#             break
+#
+#         cv2.imshow("camera", frame)
+#
+#         if cv2.waitKey(1) & 0xFF == ord('q'):
+#             break
+#
+#     cap.release()
+#     cv2.destroyAllWindows()
 
 
 # Starting point
@@ -266,23 +263,23 @@ def start_point():
 
     match task_number:
         case 1:
-            print_cam()
+            task1()
         case 2:
             task2()
         case 3:
             task3()
         case 4:
-            copy_video()
+            task4()
         case 5:
             task5()
         case 6:
             task6()
         case 7:
-            read_ip_write_to_file()
+            task7()
         case 8:
             task8()
-        case 9:
-            task9()
+        # case 9:
+        #     task9()
         case _:
             print(f'Task{task_number} doesnt exist')
             exit()

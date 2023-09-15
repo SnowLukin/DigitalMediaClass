@@ -13,7 +13,7 @@ def start_point():
         # Task 2: Apply image filtering using the command inRange
         # and leave only the red part.
         lower_red = np.array([160, 100, 100])
-        upper_red = np.array([179, 255, 255])
+        upper_red = np.array([180, 255, 255])
         mask = cv2.inRange(hsv, lower_red, upper_red)
         red_only = cv2.bitwise_and(frame, frame, mask=mask)
 
@@ -39,8 +39,8 @@ def start_point():
 
             cv2.rectangle(
                 frame,
-                (c_x - (width // 2), c_y - (height // 2)),
-                (c_x + (width // 2), c_y + (height // 2)),
+                (c_x - (width // 16), c_y - (height // 16)),
+                (c_x + (width // 16), c_y + (height // 16)),
                 (0, 0, 0),
                 2
             )
